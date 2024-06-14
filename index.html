@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Time Left Until Vacations</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-image: url('background-image.jpg'); /* Replace 'background-image.jpg' with the path to your image */
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    flex-direction: column; /* Added to align elements vertically */
+  }
+
+  #countdown-container {
+    text-align: center;
+    padding: 50px; /* Increased padding */
+    border: 4px solid red; /* Increased border thickness */
+    margin: 50px; /* Increased margin */
+    background-color: rgba(255, 204, 213, 1); /* Light pink background color */
+    width: 80%; /* Adjusted width */
+    max-width: 600px; /* Added max-width for responsiveness */
+  }
+
+  #countdown-heading {
+    color: red;
+    font-weight: bold;
+    font-size: 36px; /* Increased font size */
+    margin-bottom: 20px; /* Increased margin */
+  }
+
+  .countdown-item {
+    display: inline-block;
+    margin: 0 20px; /* Increased margin */
+    font-size: 36px; /* Increased font size */
+    color: #333333;
+  }
+
+  .progress-bar-container {
+    position: relative; /* Added for positioning the percentage text */
+    margin-top: 20px; /* Added margin */
+  }
+
+  .progress-bar {
+    width: 100%;
+    background-color: #f2f2f2;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 20px;
+    background-color: green;
+    width: calc(100% - 1px); /* Adjusted to account for border thickness */
+    transition: width 0.5s ease-in-out;
+  }
+
+  .progress-bar-text {
+    position: absolute;
+    bottom: -25px; /* Adjusted position below the progress bar */
+    left: 50%;
+    transform: translateX(-50%);
+    color: black;
+    font-size: 16px;
+  }
+</style>
+</head>
+<body>
+<div id="countdown-container">
+  <div id="countdown-heading">Time Left Until Vacations</div>
+  <div class="countdown-item" id="days">00</div>
+  <div class="countdown-item">:</div>
+  <div class="countdown-item" id="hours">00</div>
+  <div class="countdown-item">:</div>
+  <div class="countdown-item" id="minutes">00</div>
+  <div class="countdown-item">:</div>
+  <div class="countdown-item" id="seconds">00</div>
+
+  <!-- Progress Bar Container -->
+  <div class="progress-bar-container">
+    <!-- Progress Bar -->
+    <div class="progress-bar">
+      <div class="progress-bar-fill" id="progress-bar-fill"></div>
+    </div>
+    <!-- Percentage Text -->
+    <div class="progress-bar-text" id="progress-bar-text">0%</div>
+  </div>
+</div>
+
+<script>
+  function updateCountdown() {
+    const eventDate = new Date('2024-08-30');
+    const currentDate = new Date();
+    const startDate = new Date('2024-06-11'); // Start of vacations
+
+    const totalVacationDays = (eventDate - startDate) / (1000 * 60 * 60 * 24);
+    const remainingVacationDays = (eventDate - currentDate) / (1000 * 60 * 60 * 24);
+    const remainingPercentage = ((totalVacationDays - remainingVacationDays) / totalVacationDays) * 100;
+
+    const timeDiff = eventDate.getTime() - currentDate.getTime();
+    if (timeDiff <= 0) {
+      clearInterval(countdownInterval);
+      return;
+    }
+
+    const seconds = Math.floor(timeDiff / 1000) % 60;
+    const minutes = Math.floor(timeDiff / (1000 * 60)) % 60;
+    const hours = Math.floor(timeDiff / (1000 * 60 * 60)) % 24;
+    const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+
+    document.getElementById('days').textContent = formatTime(days);
+    document.getElementById('hours').textContent = formatTime(hours);
+    document.getElementById('minutes').textContent = formatTime(minutes);
+    document.getElementById('seconds').textContent = formatTime(seconds);
+
+    document.getElementById('progress-bar-fill').style.width = `${remainingPercentage}%`;
+    document.getElementById('progress-bar-text').textContent = `${Math.round(remainingPercentage)}%`;
+  }
+
+  function formatTime(time) {
+    return time < 10 ? `0${time}` : time;
+  }
+
+  const countdownInterval = setInterval(updateCountdown, 1000);
+</script>
+</body>
+</html>
